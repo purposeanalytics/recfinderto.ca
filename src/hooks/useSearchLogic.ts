@@ -231,9 +231,16 @@ export const useSearchLogic = (
         addLocationToMap(selectedLocationName);
       });
     } else if (hasActiveFilters) {
-      // No results but have active filters - return empty array to hide map
-      // This will show the "no results" message instead of the map
-      return [];
+      // No results but have active filters - show selected locations if any
+      if (filters.location.length > 0) {
+        // Add selected locations even if they don't have results
+        filters.location.forEach(selectedLocationName => {
+          addLocationToMap(selectedLocationName);
+        });
+      } else {
+        // No results and no selected locations - return empty array to hide map
+        return [];
+      }
     } else {
       // No results and no active filters - show all locations that have programs in the upcoming week
       const locationsWithPrograms = new Set<number>();
