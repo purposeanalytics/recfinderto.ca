@@ -188,7 +188,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
                     className="px-3 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700 text-sm text-gray-900 dark:text-slate-200"
                     onMouseDown={(e) => {
                       e.preventDefault() // Prevent input from losing focus
-                      handleOptionSelect('location', option);
+                      handleOptionSelect('location', option, setShowLocationDropdown);
                     }}
                   >
                     {option}

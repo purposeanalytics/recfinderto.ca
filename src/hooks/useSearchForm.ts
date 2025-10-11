@@ -88,7 +88,7 @@ export const useSearchForm = (
     }
   }, [filters, onFiltersChange, onSearch]);
 
-  const handleOptionSelect = useCallback((field: keyof typeof searchInputs, value: string) => {
+  const handleOptionSelect = useCallback((field: keyof typeof searchInputs, value: string, setShowLocationDropdown?: (show: boolean) => void) => {
     if (field === 'program') {
       setSearchInputs(prev => ({ ...prev, [field]: value }));
       const newFilters = { ...filters, courseTitle: value };
@@ -104,6 +104,10 @@ export const useSearchForm = (
         onSearch(newFilters);
       }
       setSearchInputs(prev => ({ ...prev, location: '' })); // Clear input
+      // Close the location dropdown after selection
+      if (setShowLocationDropdown) {
+        setShowLocationDropdown(false);
+      }
     }
   }, [filters, onFiltersChange, onSearch, selectedLocations]);
 
