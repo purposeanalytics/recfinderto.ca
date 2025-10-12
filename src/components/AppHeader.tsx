@@ -83,7 +83,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-200 mb-3">Access and ees</h3>
             <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
               Recreation centres differ in amenities such as gym size, equipment, or accessibility features so it’s a good idea to check details before you go.           
-              Some programs are free, while others require a small fee that is typically paid on-site or through a membership. 
+              Some programs are free, while others require a small fee that is can be paid on-site or through a membership. 
               For information about facility features and fees, please contact the recreation centre directly.  
             </p>
           </div>
