@@ -74,9 +74,18 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
               </li>
               <li className="flex items-start">
                 <span className="material-symbols-outlined text-[#13a4ec] mr-2 mt-0.5 text-sm">share</span>
-                <span><strong>Share your search:</strong> Save and share your favorite filter combinations</span>
+                <span><strong>Share your search:</strong> Save and share your favourite filter combinations</span>
               </li>
             </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-200 mb-3">Access and ees</h3>
+            <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
+              Recreation centres differ in amenities such as gym size, equipment, or accessibility features so it’s a good idea to check details before you go.           
+              Some programs are free, while others require a small fee that is typically paid on-site or through a membership. 
+              For information about facility features and fees, please contact the recreation centre directly.  
+            </p>
           </div>
           
           <div>
@@ -85,7 +94,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
               This tool uses <a className="text-[#13a4ec]" href="https://open.toronto.ca/catalogue/?search=recreation&sort=score%20desc" target="_blank">open data</a> from the City of Toronto's drop-in recreation programs and facilities. 
               It does not include data about the City's registered recreation programming such as lessons and classes.
               Data are retrieved nightly to ensure accuracy, but last-minute program changes and availability may not be accuractely reflected here. 
-              For the most current information, please contact the specific recreation centre.
+              For the most current information, please contact the recreation centre directly.
             </p>
           </div>
           
