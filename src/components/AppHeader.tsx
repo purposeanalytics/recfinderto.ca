@@ -24,13 +24,13 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
               className="h-full w-full object-contain"
             />
           </div>
-          <h2 className="text-lg font-bold leading-tight text-slate-800 dark:text-slate-200">
+          <h1 className="text-lg font-bold leading-tight text-slate-800 dark:text-slate-200">
             <span className="hidden sm:inline">Toronto Drop-in Recreation Finder</span>
             <span className="sm:hidden">
               Toronto Drop-in<br />
               Recreation Finder
             </span>
-          </h2>
+          </h1>
         </a>
         <button 
           className="flex items-center justify-center h-10 w-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
