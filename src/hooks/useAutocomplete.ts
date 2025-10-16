@@ -65,10 +65,15 @@ export const useAutocomplete = (
           .map(dropIn => dropIn["Course Title"])
           .filter((title, index, self) => self.indexOf(title) === index); // Remove duplicates
       } else {
-        // Only category specified
-        return courseTitles.filter(title => 
-          courseMatchesCategory(title, filters.category)
-        );
+        // Only category specified - need to filter by age requirements too
+        return allDropIns
+          .filter(dropIn => {
+            const courseTitle = dropIn["Course Title"];
+            if (!courseTitle) return false;
+            return courseMatchesCategory(courseTitle, filters.category, undefined, dropIn["Age Min"], dropIn["Age Max"]);
+          })
+          .map(dropIn => dropIn["Course Title"])
+          .filter((title, index, self) => self.indexOf(title) === index); // Remove duplicates
       }
     } else if (filters.subcategory) {
       // Only subcategory specified - find parent category and filter
