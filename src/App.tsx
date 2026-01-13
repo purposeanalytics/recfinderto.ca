@@ -50,7 +50,10 @@ function App() {
     if (hasSearched) {
       let searchTerm = '';
       
-      if (filters.courseTitle) {
+      // Only use course title if it's a valid course from the list (prevents arbitrary text in title)
+      const isValidCourse = filters.courseTitle && allCourseTitles.includes(filters.courseTitle);
+      
+      if (isValidCourse) {
         searchTerm = filters.courseTitle;
         description = `Find ${filters.courseTitle} drop-in programs in Toronto. ${baseDescription}`;
       } else if (filters.subcategory) {

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { SearchFilters } from '../types';
 import { getCurrentDate, getDefaultDate, getDefaultTime } from '../utils/dateTimeUtils';
+import { courseMatchesCategory } from '../services/categories';
 
 export const useSearchForm = (
   filters: SearchFilters,
@@ -41,6 +42,22 @@ export const useSearchForm = (
     // If category changes, reset subcategory
     if (field === 'category') {
       newFilters.subcategory = '';
+    }
+    
+    // If category or subcategory changes, check if current course title matches
+    // If it doesn't match, clear the course title
+    if ((field === 'category' || field === 'subcategory') && filters.courseTitle) {
+      const categoryId = field === 'category' ? value : newFilters.category;
+      const subcategoryId = field === 'subcategory' ? value : newFilters.subcategory;
+      
+      // Check if the current course title matches the new category/subcategory
+      // Note: We don't have age info here, so we check without age requirements
+      // This is a best-effort check - age filtering will happen during the actual search
+      if (categoryId && !courseMatchesCategory(filters.courseTitle, categoryId, subcategoryId || undefined)) {
+        newFilters.courseTitle = '';
+        // Also clear the search input for program
+        setSearchInputs(prev => ({ ...prev, program: '' }));
+      }
     }
     
     onFiltersChange(newFilters);
