@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import LocationMap from './components/LocationMap';
@@ -6,6 +7,7 @@ import LoadingScreen from './components/LoadingScreen';
 import ErrorScreen from './components/ErrorScreen';
 import { useAppData } from './hooks/useAppData';
 import { useSearchLogic } from './hooks/useSearchLogic';
+import { categories } from './services/categories';
 
 function App() {
   const { 
@@ -33,6 +35,101 @@ function App() {
     performSearch,
     handleLocationSelect
   } = useSearchLogic(allDropIns, allLocations, locationURLMap, locationAddressMap, locationCoordsMap);
+
+  // Update page title and SEO metadata based on search filters
+  useEffect(() => {
+    const baseTitle = 'Toronto Drop-in Recreation Finder';
+    const baseDescription = 'Discover drop-in recreation programs and activities across Toronto. Find swimming, fitness, sports, arts, and community programs near you using an interactive map and search tool.';
+    const baseUrl = 'https://recfinderto.ca';
+    
+    let title = baseTitle;
+    let description = baseDescription;
+    let canonicalUrl = baseUrl;
+    
+    // Build search-specific metadata with priority: courseTitle > subcategory > category > single location
+    if (hasSearched) {
+      let searchTerm = '';
+      
+      if (filters.courseTitle) {
+        searchTerm = filters.courseTitle;
+        description = `Find ${filters.courseTitle} drop-in programs in Toronto. ${baseDescription}`;
+      } else if (filters.subcategory) {
+        // Get subcategory display name
+        const category = categories.find(cat => 
+          cat.subcategories.some(sub => sub.id === filters.subcategory)
+        );
+        const subcategory = category?.subcategories.find(sub => sub.id === filters.subcategory);
+        searchTerm = subcategory?.name || filters.subcategory;
+        description = `Find ${searchTerm} drop-in programs in Toronto. ${baseDescription}`;
+      } else if (filters.category) {
+        // Get category display name
+        const category = categories.find(cat => cat.id === filters.category);
+        searchTerm = category?.name || filters.category;
+        description = `Find ${searchTerm} drop-in programs in Toronto. ${baseDescription}`;
+      } else if (filters.location.length === 1) {
+        // Single location selected
+        searchTerm = filters.location[0];
+        description = `Find drop-in programs at ${searchTerm} in Toronto. ${baseDescription}`;
+      }
+      
+      if (searchTerm) {
+        title = `${searchTerm} | ${baseTitle}`;
+        
+        // Include search params in canonical URL for shared searches
+        const params = new URLSearchParams(window.location.search);
+        if (params.toString()) {
+          canonicalUrl = `${baseUrl}/?${params.toString()}`;
+        }
+      }
+    }
+    
+    // Update document title
+    document.title = title;
+    
+    // Helper function to update or create meta tags
+    const updateMetaTag = (property: string, content: string, isProperty = true) => {
+      const selector = isProperty 
+        ? `meta[property="${property}"]` 
+        : `meta[name="${property}"]`;
+      
+      let tag = document.querySelector(selector);
+      
+      if (!tag) {
+        tag = document.createElement('meta');
+        if (isProperty) {
+          tag.setAttribute('property', property);
+        } else {
+          tag.setAttribute('name', property);
+        }
+        document.head.appendChild(tag);
+      }
+      
+      tag.setAttribute('content', content);
+    };
+    
+    // Update meta description
+    updateMetaTag('description', description, false);
+    
+    // Update Open Graph tags
+    updateMetaTag('og:title', title);
+    updateMetaTag('og:description', description);
+    updateMetaTag('og:url', canonicalUrl);
+    
+    // Update Twitter tags
+    updateMetaTag('twitter:title', title);
+    updateMetaTag('twitter:description', description);
+    updateMetaTag('twitter:url', canonicalUrl);
+    
+    // Update canonical link
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', canonicalUrl);
+    
+  }, [filters.courseTitle, filters.category, filters.subcategory, filters.location, hasSearched]);
 
   if (isInitialLoading) {
     return <LoadingScreen />;
