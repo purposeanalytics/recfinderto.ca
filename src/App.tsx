@@ -46,7 +46,7 @@ function App() {
     let description = baseDescription;
     let canonicalUrl = baseUrl;
     
-    // Build search-specific metadata with priority: courseTitle > subcategory > category > single location
+    // Build search-specific metadata with priority: courseTitle > subcategory > category > single location > special dates
     if (hasSearched) {
       let searchTerm = '';
       
@@ -73,6 +73,14 @@ function App() {
         // Single location selected
         searchTerm = filters.location[0];
         description = `Find drop-in programs at ${searchTerm} in Toronto. ${baseDescription}`;
+      } else if (filters.date === 'tomorrow') {
+        // Special date: tomorrow (only if no other filters are selected)
+        searchTerm = "What's Open Tomorrow";
+        description = `Find drop-in programs open tomorrow in Toronto. ${baseDescription}`;
+      } else if (filters.date === 'this-week') {
+        // Special date: this week (only if no other filters are selected)
+        searchTerm = "What's Open This Week";
+        description = `Find drop-in programs open this week in Toronto. ${baseDescription}`;
       }
       
       if (searchTerm) {
@@ -132,7 +140,7 @@ function App() {
     }
     canonicalLink.setAttribute('href', canonicalUrl);
     
-  }, [filters.courseTitle, filters.category, filters.subcategory, filters.location, hasSearched]);
+  }, [filters.courseTitle, filters.category, filters.subcategory, filters.location.join(','), filters.date, hasSearched, allCourseTitles]);
 
   if (isInitialLoading) {
     return <LoadingScreen />;

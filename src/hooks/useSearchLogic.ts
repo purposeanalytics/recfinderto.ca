@@ -393,6 +393,19 @@ export const useSearchLogic = (
             // Check if the program runs during the next week
             return (firstDate <= nextWeekStr && lastDate >= todayStr);
           });
+        } else if (currentFilters.date === 'tomorrow') {
+          // For "Tomorrow", show results for tomorrow's date
+          const today = new Date();
+          const tomorrow = new Date(today);
+          tomorrow.setDate(today.getDate() + 1);
+          const tomorrowYear = tomorrow.getFullYear();
+          const tomorrowMonth = (tomorrow.getMonth() + 1).toString().padStart(2, '0');
+          const tomorrowDay = tomorrow.getDate().toString().padStart(2, '0');
+          const tomorrowStr = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+          
+          filteredResults = filteredResults.filter(dropIn => 
+            isDateInRange(tomorrowStr, dropIn["Date Range"])
+          );
         } else {
           // For specific dates, use the existing logic
           const normalizedDate = normalizeDatePickerValue(currentFilters.date);
@@ -433,7 +446,7 @@ export const useSearchLogic = (
         const startTime = `${dropIn["Start Hour"].toString().padStart(2, '0')}:${dropIn["Start Minute"].toString().padStart(2, '0')}`;
         const endTime = `${dropIn["End Hour"].toString().padStart(2, '0')}:${dropIn["End Min"].toString().padStart(2, '0')}`;
         
-        const resultDate = currentFilters.date && currentFilters.date !== 'this-week' ? normalizeDatePickerValue(currentFilters.date) : dropIn["First Date"];
+        const resultDate = currentFilters.date && currentFilters.date !== 'this-week' && currentFilters.date !== 'tomorrow' ? normalizeDatePickerValue(currentFilters.date) : dropIn["First Date"];
         
         // Get URL and address for this location using location ID
         const locationId = dropIn["Location ID"].toString();

@@ -8,7 +8,7 @@ export const useTimeOptions = (filters: any, onFiltersChange: (filters: any) => 
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     
-    // Check if the selected date is today
+    // Check if the selected date is today (only filter past times for today, not for tomorrow or this-week)
     const today = new Date();
     const todayString = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD format in local timezone
     const isToday = filters.date === todayString;
@@ -72,15 +72,17 @@ export const useTimeOptions = (filters: any, onFiltersChange: (filters: any) => 
       const day = date.getDate();
       
       let label;
+      let value;
       if (i === 0) {
         label = 'Today';
+        value = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD format in local timezone
       } else if (i === 1) {
         label = 'Tomorrow';
+        value = 'tomorrow'; // Special value for tomorrow
       } else {
         label = `${dayName}, ${month} ${day}`;
+        value = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD format in local timezone
       }
-      
-      const value = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD format in local timezone
       
       days.push({ label, value });
     }

@@ -23,6 +23,9 @@ export const useSearchForm = (
   
   // State to track if URL has been loaded
   const [urlLoaded, setUrlLoaded] = useState(false);
+  
+  // Track the committed course title (only updated when selected/searched, not while typing)
+  const [committedCourseTitle, setCommittedCourseTitle] = useState<string>('');
 
   // Sync search inputs with filters
   useEffect(() => {
@@ -90,6 +93,8 @@ export const useSearchForm = (
     const newFilters = { ...filters };
     if (field === 'program') {
       newFilters.courseTitle = '';
+      // Clear committed course title when program is cleared
+      setCommittedCourseTitle('');
     } else if (field === 'location') {
       newFilters.location = [];
       setSelectedLocations([]);
@@ -109,6 +114,8 @@ export const useSearchForm = (
     if (field === 'program') {
       setSearchInputs(prev => ({ ...prev, [field]: value }));
       const newFilters = { ...filters, courseTitle: value };
+      // Update committed course title when a course is selected
+      setCommittedCourseTitle(value);
       onFiltersChange(newFilters);
       onSearch(newFilters);
       // Close the program dropdown after selection
@@ -159,13 +166,24 @@ export const useSearchForm = (
     const params = new URLSearchParams();
     if (filters.category) params.set('category', filters.category);
     if (filters.subcategory) params.set('subcategory', filters.subcategory);
-    if (filters.courseTitle) params.set('program', filters.courseTitle);
+    if (committedCourseTitle) params.set('program', committedCourseTitle);
     if (filters.location.length > 0) params.set('locations', filters.location.join(','));
     if (filters.age) params.set('age', filters.age);
     
+    // Only add date parameters if no other filters are selected
+    const hasOtherFilters = filters.category || filters.subcategory || committedCourseTitle || filters.location.length > 0 || filters.age;
+    if (!hasOtherFilters) {
+      // Add special date parameters only when used alone
+      if (filters.date === 'tomorrow') {
+        params.set('date', 'tomorrow');
+      } else if (filters.date === 'this-week') {
+        params.set('date', 'this-week');
+      }
+    }
+    
     const baseUrl = window.location.origin + window.location.pathname;
     return params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
-  }, [filters]);
+  }, [filters, committedCourseTitle]);
 
   const loadFromUrl = useCallback(() => {
     if (urlLoaded) return; // Prevent multiple loads
@@ -174,12 +192,21 @@ export const useSearchForm = (
     
     // Only create filters if there are URL parameters
     if (params.toString()) {
+      // Handle special date parameters
+      const dateParam = params.get('date');
+      let dateValue = getDefaultDate(); // Default date logic
+      if (dateParam === 'tomorrow') {
+        dateValue = 'tomorrow';
+      } else if (dateParam === 'this-week') {
+        dateValue = 'this-week';
+      }
+      
       const urlFilters: SearchFilters = {
         category: params.get('category') || '',
         subcategory: params.get('subcategory') || '',
         courseTitle: params.get('program') || '',
         location: params.get('locations') ? params.get('locations')!.split(',') : [],
-        date: getDefaultDate(), // Use default date logic (same as initial app load)
+        date: dateValue,
         time: getDefaultTime(), // Use default time logic (same as initial app load)
         age: params.get('age') || ''
       };
@@ -189,6 +216,9 @@ export const useSearchForm = (
       
       // Update selected locations
       setSelectedLocations(urlFilters.location);
+      
+      // Update committed course title when loading from URL
+      setCommittedCourseTitle(urlFilters.courseTitle);
       
       // Update search inputs
       setSearchInputs({
@@ -222,6 +252,8 @@ export const useSearchForm = (
       // Hide dropdown and trigger search
       if (field === 'program') {
         const newFilters = { ...filters, courseTitle: searchInputs.program };
+        // Update committed course title when Enter is pressed
+        setCommittedCourseTitle(searchInputs.program);
         onSearch(newFilters);
       }
     }
@@ -247,6 +279,9 @@ export const useSearchForm = (
     
     // Reset selected locations
     setSelectedLocations([]);
+    
+    // Clear committed course title
+    setCommittedCourseTitle('');
     
     // Update the filters and trigger search
     onFiltersChange(defaultFilters);
