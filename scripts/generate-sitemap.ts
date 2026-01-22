@@ -4,9 +4,19 @@ import { categories } from '../src/services/categories';
 const baseUrl = 'https://recfinderto.ca';
 const urls: Array<{ loc: string; changefreq: string; priority: number; lastmod?: string }> = [];
 
-// Helper to add URL with proper encoding
+// Helper to add URL with proper encoding (matching site's URLSearchParams format)
 const addUrl = (path: string, changefreq: string = 'daily', priority: number = 0.8) => {
-  const fullUrl = path.startsWith('http') ? path : `${baseUrl}${path}`;
+  let fullUrl: string;
+  if (path.startsWith('http')) {
+    fullUrl = path;
+  } else if (path.includes('?')) {
+    // If path contains query parameters, use URLSearchParams to match site's encoding
+    const [basePath, queryString] = path.split('?');
+    const params = new URLSearchParams(queryString);
+    fullUrl = `${baseUrl}${basePath}?${params.toString()}`;
+  } else {
+    fullUrl = `${baseUrl}${path}`;
+  }
   urls.push({
     loc: fullUrl,
     changefreq,
@@ -25,13 +35,18 @@ addUrl('/?date=this-week', 'daily', 0.9);
 // Add all categories
 categories.forEach(category => {
   // Add category page
-  addUrl(`/?category=${encodeURIComponent(category.id)}`, 'daily', 0.8);
+  const categoryParams = new URLSearchParams();
+  categoryParams.set('category', category.id);
+  addUrl(`/?${categoryParams.toString()}`, 'daily', 0.8);
   
   // Add category + subcategory combinations
   category.subcategories.forEach(subcategory => {
     // Skip fallback subcategories as they're less specific
     if (!subcategory.isFallback) {
-      addUrl(`/?category=${encodeURIComponent(category.id)}&subcategory=${encodeURIComponent(subcategory.id)}`, 'daily', 0.7);
+      const subcategoryParams = new URLSearchParams();
+      subcategoryParams.set('category', category.id);
+      subcategoryParams.set('subcategory', subcategory.id);
+      addUrl(`/?${subcategoryParams.toString()}`, 'daily', 0.7);
     }
   });
 });
@@ -57,12 +72,57 @@ try {
   
   // Add URLs for popular programs
   popularPrograms.forEach(program => {
-    addUrl(`/?program=${encodeURIComponent(program)}`, 'daily', 0.6);
+    const params = new URLSearchParams();
+    params.set('program', program);
+    addUrl(`/?${params.toString()}`, 'daily', 0.6);
   });
   
   console.log(`Added ${popularPrograms.length} popular programs to sitemap`);
 } catch (error) {
   console.warn('Could not read Drop-in.json, skipping popular programs:', error);
+}
+
+// Add popular locations (top 50 by program count)
+try {
+  const dropInData = JSON.parse(readFileSync('public/Drop-in.json', 'utf-8'));
+  const locationsData = JSON.parse(readFileSync('public/Locations.json', 'utf-8'));
+  
+  // Count how many programs each location has
+  const locationProgramCounts = new Map<number, number>();
+  dropInData.forEach((record: any) => {
+    const locationId = record['Location ID'];
+    if (locationId) {
+      locationProgramCounts.set(locationId, (locationProgramCounts.get(locationId) || 0) + 1);
+    }
+  });
+  
+  // Create a map from location ID to location name
+  const locationIdToName = new Map<number, string>();
+  locationsData.forEach((record: any) => {
+    const locationId = record['Location ID'];
+    const locationName = record['Location Name'];
+    if (locationId && locationName) {
+      locationIdToName.set(locationId, locationName);
+    }
+  });
+  
+  // Sort locations by program count and take top 50
+  const popularLocations = Array.from(locationProgramCounts.entries())
+    .filter(([locationId]) => locationIdToName.has(locationId)) // Only include locations with names
+    .sort((a, b) => b[1] - a[1]) // Sort by program count, highest first
+    .slice(0, 50) // Take top 50
+    .map(([locationId]) => locationIdToName.get(locationId)!);
+  
+  // Add URLs for each popular location
+  popularLocations.forEach(locationName => {
+    const params = new URLSearchParams();
+    params.set('locations', locationName);
+    addUrl(`/?${params.toString()}`, 'daily', 0.7);
+  });
+  
+  console.log(`Added ${popularLocations.length} popular locations to sitemap (top 50 by program count)`);
+} catch (error) {
+  console.warn('Could not read Drop-in.json or Locations.json, skipping locations:', error);
 }
 
 // Generate sitemap XML
