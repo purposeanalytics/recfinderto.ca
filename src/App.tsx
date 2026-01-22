@@ -8,6 +8,12 @@ import ErrorScreen from './components/ErrorScreen';
 import { useAppData } from './hooks/useAppData';
 import { useSearchLogic } from './hooks/useSearchLogic';
 import { categories } from './services/categories';
+import {
+  generateOrganizationSchema,
+  generateWebSiteSchema,
+  generateEventSchema,
+  generateLocalBusinessSchema
+} from './utils/structuredData';
 
 function App() {
   const { 
@@ -141,6 +147,85 @@ function App() {
     canonicalLink.setAttribute('href', canonicalUrl);
     
   }, [filters.courseTitle, filters.category, filters.subcategory, filters.location.join(','), filters.date, hasSearched, allCourseTitles]);
+
+  // Update JSON-LD structured data based on search state
+  useEffect(() => {
+    // Helper function to inject or update JSON-LD script
+    const injectJSONLD = (id: string, schema: any) => {
+      // Remove existing script if it exists
+      const existingScript = document.getElementById(id);
+      if (existingScript) {
+        existingScript.remove();
+      }
+      
+      // Create new script tag
+      const script = document.createElement('script');
+      script.id = id;
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    };
+    
+    // Always inject Organization and WebSite schemas
+    injectJSONLD('schema-organization', generateOrganizationSchema());
+    injectJSONLD('schema-website', generateWebSiteSchema());
+    
+    // Create mapping from location name to location ID
+    const locationNameToIdMap = new Map<string, string>();
+    allLocations.forEach(loc => {
+      locationNameToIdMap.set(loc["Location Name"], loc["Location ID"].toString());
+    });
+    
+    // Helper function to get location data by name
+    const getLocationData = (locationName: string) => {
+      const locationId = locationNameToIdMap.get(locationName);
+      if (!locationId) return null;
+      
+      const coords = locationCoordsMap.get(locationId);
+      const address = locationAddressMap.get(locationId);
+      const url = locationURLMap.get(locationId);
+      
+      return { locationId, coords, address, url };
+    };
+    
+    // Inject Event schemas when results exist (limit to first 20 to avoid overwhelming the page)
+    const existingEventScripts = document.querySelectorAll('script[id^="schema-event-"]');
+    existingEventScripts.forEach(script => script.remove());
+    
+    if (results.length > 0) {
+      const eventResults = results.slice(0, 20); // Limit to first 20 events
+      eventResults.forEach((result, index) => {
+        const locationData = getLocationData(result.location);
+        const eventSchema = generateEventSchema(result, locationData?.coords);
+        
+        if (eventSchema) {
+          injectJSONLD(`schema-event-${index}`, eventSchema);
+        }
+      });
+    }
+    
+    // Inject LocalBusiness schema when a single location is selected
+    const existingBusinessScript = document.getElementById('schema-localbusiness');
+    if (existingBusinessScript) {
+      existingBusinessScript.remove();
+    }
+    
+    if (filters.location.length === 1) {
+      const locationName = filters.location[0];
+      const locationData = getLocationData(locationName);
+      
+      if (locationData) {
+        const businessSchema = generateLocalBusinessSchema(
+          locationName,
+          locationData.address,
+          locationData.coords,
+          locationData.url || undefined
+        );
+        injectJSONLD('schema-localbusiness', businessSchema);
+      }
+    }
+    
+  }, [results, filters.location, allLocations, locationCoordsMap, locationAddressMap, locationURLMap]);
 
   if (isInitialLoading) {
     return <LoadingScreen />;

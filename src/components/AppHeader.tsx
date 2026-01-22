@@ -91,7 +91,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-200 mb-3">Data source</h3>
             <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-              This tool uses <a className="text-[#13a4ec]" href="https://open.toronto.ca/catalogue/?search=recreation&sort=score%20desc" target="_blank">open data</a> from the City of Toronto's drop-in recreation programs and facilities. 
+              This tool uses <a className="text-[#13a4ec]" href="https://open.toronto.ca/catalogue/?search=recreation&sort=score%20desc" target="_blank" rel="noopener noreferrer">open data</a> from the City of Toronto's drop-in recreation programs and facilities. 
               It does not include information about the City's registered recreation programming such as lessons and classes.
               Data are retrieved nightly to ensure accuracy, but last-minute program changes and availability may not be accuractely reflected here. 
               For the most current information, please contact the recreation centre directly.
@@ -105,7 +105,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onAboutClick }) => {
                   Built with <svg className="inline w-5 h-5 fill-[#13a4ec]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="heartTitle">
                       <title id="heartTitle">Heart icon</title>
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09 C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg> by <a className="text-[#13a4ec] hover:text-[#13a4ec]/80" href="https://purposeanalytics.ca" target="_blank">Purpose Analytics</a>
+                    </svg> by <a className="text-[#13a4ec] hover:text-[#13a4ec]/80" href="https://purposeanalytics.ca" target="_blank" rel="noopener noreferrer">Purpose Analytics</a>
                 </p>
               </div>
               <div className="flex items-center gap-3">

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /*?*
+
+# Sitemap location
+Sitemap: https://recfinderto.ca/sitemap.xml
