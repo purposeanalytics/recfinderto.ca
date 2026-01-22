@@ -25,31 +25,31 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=arts-crafts&subcategory=visual-arts</loc>
+    <loc>https://recfinderto.ca/?category=arts-crafts&amp;subcategory=visual-arts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=arts-crafts&subcategory=crafts</loc>
+    <loc>https://recfinderto.ca/?category=arts-crafts&amp;subcategory=crafts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=arts-crafts&subcategory=music</loc>
+    <loc>https://recfinderto.ca/?category=arts-crafts&amp;subcategory=music</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=arts-crafts&subcategory=dance</loc>
+    <loc>https://recfinderto.ca/?category=arts-crafts&amp;subcategory=dance</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=arts-crafts&subcategory=creative-writing</loc>
+    <loc>https://recfinderto.ca/?category=arts-crafts&amp;subcategory=creative-writing</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -61,25 +61,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=family&subcategory=family-swim</loc>
+    <loc>https://recfinderto.ca/?category=family&amp;subcategory=family-swim</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=family&subcategory=family-sports</loc>
+    <loc>https://recfinderto.ca/?category=family&amp;subcategory=family-sports</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=family&subcategory=family-arts</loc>
+    <loc>https://recfinderto.ca/?category=family&amp;subcategory=family-arts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=family&subcategory=early-years</loc>
+    <loc>https://recfinderto.ca/?category=family&amp;subcategory=early-years</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -91,49 +91,49 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=yoga</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=yoga</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=pilates</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=pilates</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=cardio</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=cardio</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=zumba</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=zumba</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=strength</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=strength</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=hiit</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=hiit</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=gentle-fitness</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=gentle-fitness</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=fitness&subcategory=walking</loc>
+    <loc>https://recfinderto.ca/?category=fitness&amp;subcategory=walking</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -145,43 +145,43 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=club</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=club</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=board-games</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=board-games</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=card-games</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=card-games</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=billiards</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=billiards</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=darts</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=darts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=video-games</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=video-games</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=games&subcategory=bingo</loc>
+    <loc>https://recfinderto.ca/?category=games&amp;subcategory=bingo</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -193,37 +193,37 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-arts-crafts</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-arts-crafts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-games</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-games</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-swimming</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-swimming</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-fitness</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-fitness</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-sports</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-sports</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=older-adult&subcategory=older-adult-skating</loc>
+    <loc>https://recfinderto.ca/?category=older-adult&amp;subcategory=older-adult-skating</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -235,25 +235,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=skating&subcategory=hockey</loc>
+    <loc>https://recfinderto.ca/?category=skating&amp;subcategory=hockey</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=skating&subcategory=leisure-skate</loc>
+    <loc>https://recfinderto.ca/?category=skating&amp;subcategory=leisure-skate</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=skating&subcategory=figure-skating</loc>
+    <loc>https://recfinderto.ca/?category=skating&amp;subcategory=figure-skating</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=skating&subcategory=roller-skating</loc>
+    <loc>https://recfinderto.ca/?category=skating&amp;subcategory=roller-skating</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -265,19 +265,19 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=specialized&subcategory=adapted</loc>
+    <loc>https://recfinderto.ca/?category=specialized&amp;subcategory=adapted</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=specialized&subcategory=lgbtq</loc>
+    <loc>https://recfinderto.ca/?category=specialized&amp;subcategory=lgbtq</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=specialized&subcategory=women-only</loc>
+    <loc>https://recfinderto.ca/?category=specialized&amp;subcategory=women-only</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -289,49 +289,49 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=basketball</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=basketball</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=badminton</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=badminton</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=pickleball</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=pickleball</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=soccer</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=soccer</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=volleyball</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=volleyball</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=table-tennis</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=table-tennis</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=hockey</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=hockey</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=sports&subcategory=multi-sport</loc>
+    <loc>https://recfinderto.ca/?category=sports&amp;subcategory=multi-sport</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -343,25 +343,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=swimming&subcategory=lane-swim</loc>
+    <loc>https://recfinderto.ca/?category=swimming&amp;subcategory=lane-swim</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=swimming&subcategory=leisure-swim</loc>
+    <loc>https://recfinderto.ca/?category=swimming&amp;subcategory=leisure-swim</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=swimming&subcategory=family-swim</loc>
+    <loc>https://recfinderto.ca/?category=swimming&amp;subcategory=family-swim</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=swimming&subcategory=aquatic-fitness</loc>
+    <loc>https://recfinderto.ca/?category=swimming&amp;subcategory=aquatic-fitness</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -373,43 +373,43 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-clubs</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-clubs</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-enhanced</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-enhanced</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-arts</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-arts</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-fitness</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-fitness</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-leadership</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-leadership</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-sports</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-sports</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?category=youth&subcategory=youth-skating</loc>
+    <loc>https://recfinderto.ca/?category=youth&amp;subcategory=youth-skating</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -565,13 +565,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Shinny%3A%20Adult%20(Unsupervised)</loc>
+    <loc>https://recfinderto.ca/?program=Shinny%3A%20Child</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Shinny%3A%20Child</loc>
+    <loc>https://recfinderto.ca/?program=Shinny%3A%20Adult%20(Unsupervised)</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -625,13 +625,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Shinny%20(Women)</loc>
+    <loc>https://recfinderto.ca/?program=Tai%20Chi</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Tai%20Chi</loc>
+    <loc>https://recfinderto.ca/?program=Shinny%20(Women)</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -703,13 +703,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Youth%20Council</loc>
+    <loc>https://recfinderto.ca/?program=HIIT%3A%20Boot%20Camp</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://recfinderto.ca/?program=Chop%20It%20Like%20It's%20Hot!</loc>
+    <loc>https://recfinderto.ca/?program=Youth%20Council</loc>
     <lastmod>2026-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
