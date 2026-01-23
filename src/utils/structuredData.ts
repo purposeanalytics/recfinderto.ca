@@ -106,10 +106,28 @@ export const generateEventSchema = (
     };
   }
   
+  // Build description from available data
+  const descriptionParts: string[] = [];
+  descriptionParts.push(`Drop-in program: ${result.courseTitle}`);
+  if (result.location) {
+    descriptionParts.push(`at ${result.location}`);
+  }
+  if (result.category || result.subcategory) {
+    const categoryInfo = [result.category, result.subcategory].filter(Boolean).join(' - ');
+    if (categoryInfo) {
+      descriptionParts.push(`(${categoryInfo})`);
+    }
+  }
+  if (result.ageRange) {
+    descriptionParts.push(`for ${result.ageRange}`);
+  }
+  const description = descriptionParts.join(' ');
+
   const eventSchema: any = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: result.courseTitle,
+    description: description,
     startDate: startDateTime,
     endDate: endDateTime,
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -117,8 +135,12 @@ export const generateEventSchema = (
     location: locationSchema,
     organizer: {
       '@type': 'Organization',
-      name: 'City of Toronto Parks, Forestry & Recreation'
+      name: 'City of Toronto Parks, Forestry & Recreation',
+      url: 'https://www.toronto.ca'
     }
+    // Removed: image (no relevant event images available)
+    // Removed: performer (not applicable for drop-in recreation programs)
+    // Removed: offers (pricing varies and not available in data)
   };
   
   // Add audience/age range if available

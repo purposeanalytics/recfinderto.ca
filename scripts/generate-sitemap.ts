@@ -110,7 +110,7 @@ try {
   const popularLocations = Array.from(locationProgramCounts.entries())
     .filter(([locationId]) => locationIdToName.has(locationId)) // Only include locations with names
     .sort((a, b) => b[1] - a[1]) // Sort by program count, highest first
-    .slice(0, 50) // Take top 50
+    .slice(0, 80) // Take top 50
     .map(([locationId]) => locationIdToName.get(locationId)!);
   
   // Add URLs for each popular location
