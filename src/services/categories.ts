@@ -164,7 +164,7 @@ export const categories: Category[] = [
     fallbackIcon: 'interests',
     subcategories: [
       { id: 'adapted', name: 'Adapted Programs', keywords: ['adapted', 'parasport'] },
-      { id: 'lgbtq', name: 'LGBTQ+ Programs', keywords: ['lgbtq', '2slgbtq'] },
+      { id: 'lgbtq', name: 'LGBTQ+ Programs', keywords: ['lgbtq', '2slgbtq', 'pride'] },
       { id: 'women-only', name: 'Women Only', keywords: ['women only', '(women)', 'girls'] }
     ]
   },
