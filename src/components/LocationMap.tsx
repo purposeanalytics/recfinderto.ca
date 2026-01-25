@@ -167,6 +167,15 @@ const LocationMap: React.FC<LocationMapProps> = ({
   useEffect(() => {
     if (!map.current || !mapboxLoaded) return;
 
+    // Don't update markers if user is actively typing in an input field
+    // This prevents focus loss while typing
+    const activeElement = document.activeElement;
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+      // User is typing - skip marker update to preserve focus
+      // Markers will update when user finishes typing and input loses focus
+      return;
+    }
+
     // Store which popup was open before clearing markers
     const previouslyOpenLocation = openPopupLocation.current;
     const wasPopupOpen = previouslyOpenLocation && markers.current.has(previouslyOpenLocation) && 
@@ -364,14 +373,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
                 (btn as HTMLElement).blur();
               });
               
-              // Focus the "View on City Website" link if it exists
-              const cityWebsiteLink = popupElement.querySelector('a[href*="http"]') as HTMLElement;
-              if (cityWebsiteLink) {
-                // Use setTimeout to ensure the popup is fully rendered
-                setTimeout(() => {
-                  cityWebsiteLink.focus();
-                }, 0);
-              }
+              // Don't auto-focus the link as it interferes with user input in other fields
               
               // Use event delegation from the popup element
               popupElement.addEventListener('click', (e: MouseEvent) => {
@@ -506,6 +508,12 @@ const LocationMap: React.FC<LocationMapProps> = ({
   useEffect(() => {
     if (!map.current || !mapboxLoaded) return;
 
+    // Don't update popup if user is actively typing in an input field
+    const activeElement = document.activeElement;
+    if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+      return;
+    }
+
     markers.current.forEach((marker, locationName) => {
       const popup = marker.getPopup();
       if (popup.isOpen()) {
@@ -572,14 +580,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
               (btn as HTMLElement).blur();
             });
             
-            // Focus the "View on City Website" link if it exists
-            const cityWebsiteLink = popupElement.querySelector('a[href*="http"]') as HTMLElement;
-            if (cityWebsiteLink) {
-              // Use setTimeout to ensure the popup is fully rendered
-              setTimeout(() => {
-                cityWebsiteLink.focus();
-              }, 0);
-            }
+            // Don't auto-focus the link as it interferes with user input in other fields
             
             popupElement.addEventListener('click', (e: MouseEvent) => {
               const target = e.target as HTMLElement;
