@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { categories, courseMatchesCategory } from '../services/categories';
+import type { DropInRecord, Location as LocationType } from '../types';
 
 interface Location {
   name: string;
@@ -15,13 +17,69 @@ interface LocationMapProps {
   onLocationSelect?: (location: string) => void;
   selectedLocations?: string[];
   locationHasResults?: (locationName: string) => boolean;
+  allDropIns?: DropInRecord[];
+  allLocations?: LocationType[];
+  onCategoryFilter?: (location: string, categoryId: string) => void;
+  currentCategory?: string;
 }
 
-const LocationMap: React.FC<LocationMapProps> = ({ locations, isLoading, selectedLocation, onLocationSelect, selectedLocations = [], locationHasResults }) => {
+const LocationMap: React.FC<LocationMapProps> = ({ 
+  locations, 
+  isLoading, 
+  selectedLocation, 
+  onLocationSelect, 
+  selectedLocations = [], 
+  locationHasResults,
+  allDropIns = [],
+  allLocations = [],
+  onCategoryFilter,
+  currentCategory
+}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const markers = useRef<Map<string, any>>(new Map());
   const [mapboxLoaded, setMapboxLoaded] = useState(false);
+  const openPopupLocation = useRef<string | null>(null);
+  const preventPopupClose = useRef<boolean>(false);
+
+  // Helper function to get available categories for a location
+  const getAvailableCategories = (locationName: string): Array<{ id: string; name: string; icon: string }> => {
+    if (!allDropIns.length || !allLocations.length) return [];
+
+    // Find the location ID
+    const location = allLocations.find(loc => loc["Location Name"] === locationName);
+    if (!location) return [];
+
+    const locationId = location["Location ID"];
+
+    // Get all programs at this location
+    const locationPrograms = allDropIns.filter(dropIn => dropIn["Location ID"] === locationId);
+
+    // Find which categories have programs at this location
+    const availableCategoryIds = new Set<string>();
+    
+    locationPrograms.forEach(dropIn => {
+      const courseTitle = dropIn["Course Title"];
+      if (!courseTitle) return;
+
+      // Check each category to see if this program matches
+      categories.forEach(category => {
+        if (courseMatchesCategory(courseTitle, category.id, undefined, dropIn["Age Min"], dropIn["Age Max"])) {
+          availableCategoryIds.add(category.id);
+        }
+      });
+    });
+
+    // Return category info for available categories
+    return categories
+      .filter(cat => availableCategoryIds.has(cat.id))
+      .map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        icon: cat.fallbackIcon
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  };
 
 
 
@@ -109,10 +167,16 @@ const LocationMap: React.FC<LocationMapProps> = ({ locations, isLoading, selecte
   useEffect(() => {
     if (!map.current || !mapboxLoaded) return;
 
+    // Store which popup was open before clearing markers
+    const previouslyOpenLocation = openPopupLocation.current;
+    const wasPopupOpen = previouslyOpenLocation && markers.current.has(previouslyOpenLocation) && 
+      markers.current.get(previouslyOpenLocation)?.getPopup().isOpen();
+
     // If no locations, clear markers and return
     if (locations.length === 0) {
       markers.current.forEach(marker => marker.remove());
       markers.current.clear();
+      openPopupLocation.current = null;
       return;
     }
 
@@ -207,23 +271,155 @@ const LocationMap: React.FC<LocationMapProps> = ({ locations, isLoading, selecte
           `;
         }
 
-        const marker = new (window as any).maplibregl.Marker({ element: markerElement })
-          .setLngLat([location.lng, location.lat])
-          .setPopup(
-            new (window as any).maplibregl.Popup().setHTML(`
+        // Get available categories for this location
+        const availableCategories = getAvailableCategories(location.name);
+        
+        // Build category filter buttons HTML
+        let categoryFiltersHTML = '';
+        if (availableCategories.length > 0 && onCategoryFilter) {
+          const categoryButtons = availableCategories.map(cat => {
+            const escapedLocationName = location.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const escapedCategoryId = cat.id.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const isSelected = currentCategory === cat.id && selectedLocations.includes(location.name);
+            const buttonClasses = isSelected
+              ? 'category-filter-btn inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#13a4ec]/20 dark:bg-[#13a4ec]/30 text-[#13a4ec] dark:text-[#13a4ec] border-2 border-[#13a4ec] dark:border-[#13a4ec] hover:bg-[#13a4ec]/30 dark:hover:bg-[#13a4ec]/40 transition-colors focus:outline-none'
+              : 'category-filter-btn inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-[#13a4ec]/10 dark:hover:bg-[#13a4ec]/20 hover:text-[#13a4ec] dark:hover:text-[#13a4ec] transition-colors focus:outline-none border-0';
+            return `
+              <button 
+                class="${buttonClasses}"
+                data-location="${escapedLocationName}"
+                data-category="${escapedCategoryId}"
+                title="${cat.name}"
+                tabindex="-1"
+                onfocus="this.blur()"
+              >
+                <span class="material-symbols-outlined text-base">${cat.icon}</span>
+              </button>
+            `;
+          }).join('');
+
+          categoryFiltersHTML = `
+            <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-600">
+              <p class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">At this location:</p>
+              <div class="flex flex-wrap gap-1.5">
+                ${categoryButtons}
+              </div>
+            </div>
+          `;
+        }
+
+        const popup = new (window as any).maplibregl.Popup().setHTML(`
               <div class="p-2">
                 <h3 class="font-semibold text-base text-slate-800 dark:text-slate-800">${location.name}</h3>
                 ${location.address ? `<p class="mt-1 text-sm text-slate-500 dark:text-slate-500 whitespace-pre-line">${location.address}</p>` : ''}
+                ${categoryFiltersHTML}
                 ${location.url ? `
-                  <a class="p-1 mt-4 inline-flex items-center justify-center line-height-1 w-full bg-[#13a4ec]/10 dark:bg-[#13a4ec]/20 text-gray-700 dark:text-gray-700 text-sm font-medium px-4 rounded-lg hover:text-black dark:hover:text-white hover:bg-[#13a4ec]/1 dark:hover:bg-[#13a4ec]/30 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#13a4ec] focus:ring-offset-2 transition-all duration-200 ease-in-out" href="${location.url}" target="_blank" rel="noopener noreferrer">
+                  <a class="p-1 mt-4 inline-flex items-center justify-center line-height-1 w-full bg-[#13a4ec]/10 dark:bg-[#13a4ec]/20 text-gray-700 dark:text-gray-700 text-sm font-medium px-4 rounded-lg hover:text-black dark:hover:text-white hover:bg-[#13a4ec]/1 dark:hover:bg-[#13a4ec]/30 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#13a4ec] focus:ring-offset-2 focus:bg-[#13a4ec]/20 dark:focus:bg-[#13a4ec]/30 focus:text-[#13a4ec] dark:focus:text-[#13a4ec] focus:shadow-lg transition-all duration-200 ease-in-out" href="${location.url}" target="_blank" rel="noopener noreferrer">
                     <span>View on City Website</span>
                     <span class="material-symbols-outlined ml-2 text-base transition-transform duration-200 ease-in-out group-hover:translate-x-1">arrow_right_alt</span>
                   </a>
                 ` : ''}
               </div>
-            `)
-          )
+            `);
+        
+        // Track popup open/close events
+        popup.on('open', () => {
+          openPopupLocation.current = location.name;
+          preventPopupClose.current = false; // Reset prevent flag when popup opens
+        });
+        
+        popup.on('close', () => {
+          // Don't clear if we're intentionally keeping this popup open
+          // Only clear if it's the same location and we're not keeping it open
+          if (openPopupLocation.current === location.name) {
+            // Check if we should keep it open (e.g., after a category filter click)
+            // Delay clearing to allow for reopening
+            setTimeout(() => {
+              // Only clear if popup is still closed and we haven't set it again
+              const marker = markers.current.get(location.name);
+              if (marker) {
+                const currentPopup = marker.getPopup();
+                if (!currentPopup.isOpen() && openPopupLocation.current === location.name) {
+                  openPopupLocation.current = null;
+                }
+              }
+            }, 300);
+          }
+        });
+
+        const marker = new (window as any).maplibregl.Marker({ element: markerElement })
+          .setLngLat([location.lng, location.lat])
+          .setPopup(popup)
           .addTo(map.current);
+
+        // Add click handlers for category filter buttons
+        if (onCategoryFilter && availableCategories.length > 0) {
+          // Use the popup's open event to ensure the element exists
+          marker.getPopup().once('open', () => {
+            const popupElement = marker.getPopup().getElement();
+            if (popupElement) {
+              // Remove focus from any buttons to prevent outline
+              const buttons = popupElement.querySelectorAll('.category-filter-btn');
+              buttons.forEach(btn => {
+                (btn as HTMLElement).blur();
+              });
+              
+              // Focus the "View on City Website" link if it exists
+              const cityWebsiteLink = popupElement.querySelector('a[href*="http"]') as HTMLElement;
+              if (cityWebsiteLink) {
+                // Use setTimeout to ensure the popup is fully rendered
+                setTimeout(() => {
+                  cityWebsiteLink.focus();
+                }, 0);
+              }
+              
+              // Use event delegation from the popup element
+              popupElement.addEventListener('click', (e: MouseEvent) => {
+                const target = e.target as HTMLElement;
+                const button = target.closest('.category-filter-btn') as HTMLElement;
+                if (button) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  const locationName = button.getAttribute('data-location');
+                  const categoryId = button.getAttribute('data-category');
+                  if (locationName && categoryId && onCategoryFilter) {
+                    // Check if this category is already selected - if so, clear the filter
+                    const isCurrentlySelected = currentCategory === categoryId && selectedLocations.includes(locationName);
+                    const filterCategoryId = isCurrentlySelected ? '' : categoryId;
+                    
+                    // Store that this popup should stay open and prevent it from closing
+                    openPopupLocation.current = locationName;
+                    preventPopupClose.current = true;
+                    onCategoryFilter(locationName, filterCategoryId);
+                    // Keep popup open - check and reopen if needed
+                    setTimeout(() => {
+                      const marker = markers.current.get(locationName);
+                      if (marker && openPopupLocation.current === locationName) {
+                        const popup = marker.getPopup();
+                        if (!popup.isOpen()) {
+                          marker.togglePopup();
+                        }
+                      }
+                    }, 50);
+                    // Also check again after a longer delay in case of async updates
+                    setTimeout(() => {
+                      const marker = markers.current.get(locationName);
+                      if (marker && openPopupLocation.current === locationName) {
+                        const popup = marker.getPopup();
+                        if (!popup.isOpen()) {
+                          marker.togglePopup();
+                        }
+                      }
+                      // Reset the prevent close flag after ensuring popup is open
+                      preventPopupClose.current = false;
+                    }, 250);
+                  }
+                }
+              });
+            }
+          });
+        }
 
         // Add click handler to marker
         markerElement.addEventListener('click', (e) => {
@@ -264,7 +460,30 @@ const LocationMap: React.FC<LocationMapProps> = ({ locations, isLoading, selecte
       }
     }
 
-  }, [locations, mapboxLoaded, selectedLocation, selectedLocations, locationHasResults]);
+    // Preserve and reopen popup if it was open before marker recreation
+    if (wasPopupOpen && previouslyOpenLocation) {
+      // Check if this location still exists in the new locations array
+      const locationStillExists = locations.some(loc => loc.name === previouslyOpenLocation);
+      if (locationStillExists) {
+        // Restore the open popup location reference
+        openPopupLocation.current = previouslyOpenLocation;
+        // Reopen the popup after a short delay to ensure markers are created
+        setTimeout(() => {
+          const marker = markers.current.get(previouslyOpenLocation);
+          if (marker) {
+            const popup = marker.getPopup();
+            if (!popup.isOpen()) {
+              marker.togglePopup();
+            }
+          }
+        }, 150);
+      } else {
+        // Location no longer exists, clear the reference
+        openPopupLocation.current = null;
+      }
+    }
+
+  }, [locations, mapboxLoaded, selectedLocation, selectedLocations, locationHasResults, allDropIns, allLocations, onCategoryFilter, currentCategory]);
 
   // Handle popup opening when location is selected
   useEffect(() => {
@@ -282,6 +501,134 @@ const LocationMap: React.FC<LocationMapProps> = ({ locations, isLoading, selecte
       selectedMarker.togglePopup();
     }
   }, [selectedLocation, mapboxLoaded]);
+
+  // Update popup content when category changes to reflect highlighting
+  useEffect(() => {
+    if (!map.current || !mapboxLoaded) return;
+
+    markers.current.forEach((marker, locationName) => {
+      const popup = marker.getPopup();
+      if (popup.isOpen()) {
+        // Regenerate popup content with updated highlighting
+        const location = locations.find(loc => loc.name === locationName);
+        if (location) {
+          const availableCategories = getAvailableCategories(locationName);
+          
+          let categoryFiltersHTML = '';
+          if (availableCategories.length > 0 && onCategoryFilter) {
+            const categoryButtons = availableCategories.map(cat => {
+              const escapedLocationName = location.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+              const escapedCategoryId = cat.id.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+              const isSelected = currentCategory === cat.id && selectedLocations.includes(location.name);
+              const buttonClasses = isSelected
+                ? 'category-filter-btn inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#13a4ec]/20 dark:bg-[#13a4ec]/30 text-[#13a4ec] dark:text-[#13a4ec] border-2 border-[#13a4ec] dark:border-[#13a4ec] hover:bg-[#13a4ec]/30 dark:hover:bg-[#13a4ec]/40 transition-colors focus:outline-none'
+                : 'category-filter-btn inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-[#13a4ec]/10 dark:hover:bg-[#13a4ec]/20 hover:text-[#13a4ec] dark:hover:text-[#13a4ec] transition-colors focus:outline-none border-0';
+              return `
+                <button 
+                  class="${buttonClasses}"
+                  data-location="${escapedLocationName}"
+                  data-category="${escapedCategoryId}"
+                  title="${cat.name}"
+                  tabindex="-1"
+                  onfocus="this.blur()"
+                >
+                  <span class="material-symbols-outlined text-base">${cat.icon}</span>
+                </button>
+              `;
+            }).join('');
+
+            categoryFiltersHTML = `
+              <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-600">
+                <p class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">At this location:</p>
+                <div class="flex flex-wrap gap-1.5">
+                  ${categoryButtons}
+                </div>
+              </div>
+            `;
+          }
+
+          const popupHTML = `
+            <div class="p-2">
+              <h3 class="font-semibold text-base text-slate-800 dark:text-slate-800">${location.name}</h3>
+              ${location.address ? `<p class="mt-1 text-sm text-slate-500 dark:text-slate-500 whitespace-pre-line">${location.address}</p>` : ''}
+              ${categoryFiltersHTML}
+              ${location.url ? `
+                <a class="p-1 mt-4 inline-flex items-center justify-center line-height-1 w-full bg-[#13a4ec]/10 dark:bg-[#13a4ec]/20 text-gray-700 dark:text-gray-700 text-sm font-medium px-4 rounded-lg hover:text-black dark:hover:text-white hover:bg-[#13a4ec]/1 dark:hover:bg-[#13a4ec]/30 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#13a4ec] focus:ring-offset-2 transition-all duration-200 ease-in-out" href="${location.url}" target="_blank" rel="noopener noreferrer">
+                  <span>View on City Website</span>
+                  <span class="material-symbols-outlined ml-2 text-base transition-transform duration-200 ease-in-out group-hover:translate-x-1">arrow_right_alt</span>
+                </a>
+              ` : ''}
+            </div>
+          `;
+          
+          popup.setHTML(popupHTML);
+          
+          // Re-attach event listeners
+          const popupElement = popup.getElement();
+          if (popupElement && onCategoryFilter) {
+            // Remove focus from any buttons to prevent outline
+            const buttons = popupElement.querySelectorAll('.category-filter-btn');
+            buttons.forEach(btn => {
+              (btn as HTMLElement).blur();
+            });
+            
+            // Focus the "View on City Website" link if it exists
+            const cityWebsiteLink = popupElement.querySelector('a[href*="http"]') as HTMLElement;
+            if (cityWebsiteLink) {
+              // Use setTimeout to ensure the popup is fully rendered
+              setTimeout(() => {
+                cityWebsiteLink.focus();
+              }, 0);
+            }
+            
+            popupElement.addEventListener('click', (e: MouseEvent) => {
+              const target = e.target as HTMLElement;
+              const button = target.closest('.category-filter-btn') as HTMLElement;
+              if (button) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                const buttonLocationName = button.getAttribute('data-location');
+                const buttonCategoryId = button.getAttribute('data-category');
+                if (buttonLocationName && buttonCategoryId && onCategoryFilter) {
+                  // Check if this category is already selected - if so, clear the filter
+                  const isCurrentlySelected = currentCategory === buttonCategoryId && selectedLocations.includes(buttonLocationName);
+                  const filterCategoryId = isCurrentlySelected ? '' : buttonCategoryId;
+                  
+                  // Store that this popup should stay open and prevent it from closing
+                  openPopupLocation.current = buttonLocationName;
+                  preventPopupClose.current = true;
+                  onCategoryFilter(buttonLocationName, filterCategoryId);
+                  // Keep popup open - check and reopen if needed
+                  setTimeout(() => {
+                    const marker = markers.current.get(buttonLocationName);
+                    if (marker && openPopupLocation.current === buttonLocationName) {
+                      const popup = marker.getPopup();
+                      if (!popup.isOpen()) {
+                        marker.togglePopup();
+                      }
+                    }
+                  }, 50);
+                  // Also check again after a longer delay in case of async updates
+                  setTimeout(() => {
+                    const marker = markers.current.get(buttonLocationName);
+                    if (marker && openPopupLocation.current === buttonLocationName) {
+                      const popup = marker.getPopup();
+                      if (!popup.isOpen()) {
+                        marker.togglePopup();
+                      }
+                    }
+                    // Reset the prevent close flag after ensuring popup is open
+                    preventPopupClose.current = false;
+                  }, 250);
+                }
+              }
+            });
+          }
+        }
+      }
+    });
+  }, [currentCategory, selectedLocations, locations, mapboxLoaded, onCategoryFilter]);
 
   // Cleanup effect
   useEffect(() => {

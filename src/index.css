@@ -68,11 +68,23 @@ button:focus-visible {
 }
 
 .maplibregl-popup {
-  max-width: 280px !important;
+  max-width: 300px !important;
 }
 
 .maplibregl-popup-close-button {
-  padding: 0 5px;
+  padding: 8px !important;
+  font-size: 20px !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #9ca3af !important;
+}
+
+.maplibregl-popup-close-button:hover {
+  color: #6b7280 !important;
 }
 
 /* Prefer this: keep a subtle, accessible focus style */

@@ -42,6 +42,21 @@ function App() {
     handleLocationSelect
   } = useSearchLogic(allDropIns, allLocations, locationURLMap, locationAddressMap, locationCoordsMap);
 
+  // Handler for category filter from map popup
+  const handleCategoryFilter = (locationName: string, categoryId: string) => {
+    const newFilters = {
+      ...filters,
+      location: [locationName],
+      category: categoryId || '', // If empty string, clear category filter
+      subcategory: '', // Clear subcategory when selecting category
+      courseTitle: '', // Clear course title
+      age: '' // Clear age filter
+      // Preserve date and time filters
+    };
+    setFilters(newFilters);
+    performSearch(newFilters);
+  };
+
   // Update page title and SEO metadata based on search filters
   useEffect(() => {
     const baseTitle = 'Toronto Drop-in Recreation Finder';
@@ -283,6 +298,10 @@ function App() {
                   // Check if any results exist for this specific location
                   return results.some(result => result.location === locationName);
                 }}
+                allDropIns={allDropIns}
+                allLocations={allLocations}
+                onCategoryFilter={handleCategoryFilter}
+                currentCategory={filters.category}
               />
         </div>
 
