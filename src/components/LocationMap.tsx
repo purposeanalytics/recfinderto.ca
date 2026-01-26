@@ -176,16 +176,13 @@ const LocationMap: React.FC<LocationMapProps> = ({
       return;
     }
 
-    // Store which popup was open before clearing markers
-    const previouslyOpenLocation = openPopupLocation.current;
-    const wasPopupOpen = previouslyOpenLocation && markers.current.has(previouslyOpenLocation) && 
-      markers.current.get(previouslyOpenLocation)?.getPopup().isOpen();
+    // Store which popup was open before clearing markers (for potential future use)
+    // const previouslyOpenLocation = openPopupLocation.current;
 
     // If no locations, clear markers and return
     if (locations.length === 0) {
       markers.current.forEach(marker => marker.remove());
       markers.current.clear();
-      openPopupLocation.current = null;
       return;
     }
 
@@ -369,7 +366,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
             if (popupElement) {
               // Remove focus from any buttons to prevent outline
               const buttons = popupElement.querySelectorAll('.category-filter-btn');
-              buttons.forEach(btn => {
+              buttons.forEach((btn: Element) => {
                 (btn as HTMLElement).blur();
               });
               
@@ -462,30 +459,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
       }
     }
 
-    // Preserve and reopen popup if it was open before marker recreation
-    if (wasPopupOpen && previouslyOpenLocation) {
-      // Check if this location still exists in the new locations array
-      const locationStillExists = locations.some(loc => loc.name === previouslyOpenLocation);
-      if (locationStillExists) {
-        // Restore the open popup location reference
-        openPopupLocation.current = previouslyOpenLocation;
-        // Reopen the popup after a short delay to ensure markers are created
-        setTimeout(() => {
-          const marker = markers.current.get(previouslyOpenLocation);
-          if (marker) {
-            const popup = marker.getPopup();
-            if (!popup.isOpen()) {
-              marker.togglePopup();
-            }
-          }
-        }, 150);
-      } else {
-        // Location no longer exists, clear the reference
-        openPopupLocation.current = null;
-      }
-    }
-
-  }, [locations, mapboxLoaded, selectedLocation, selectedLocations, locationHasResults, allDropIns, allLocations, onCategoryFilter, currentCategory]);
+  }, [locations, mapboxLoaded, selectedLocation, selectedLocations, locationHasResults]);
 
   // Handle popup opening when location is selected
   useEffect(() => {
@@ -576,7 +550,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
           if (popupElement && onCategoryFilter) {
             // Remove focus from any buttons to prevent outline
             const buttons = popupElement.querySelectorAll('.category-filter-btn');
-            buttons.forEach(btn => {
+            buttons.forEach((btn: Element) => {
               (btn as HTMLElement).blur();
             });
             

@@ -72,18 +72,11 @@ button:focus-visible {
 }
 
 .maplibregl-popup-close-button {
-  padding: 8px !important;
-  font-size: 20px !important;
+  padding: 0 8px;
+  font-size: 24px !important;
   width: 32px !important;
   height: 32px !important;
-  line-height: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: #9ca3af !important;
-}
-
-.maplibregl-popup-close-button:hover {
+  line-height: 32px !important;
   color: #6b7280 !important;
 }
 

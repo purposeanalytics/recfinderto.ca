@@ -42,17 +42,22 @@ function App() {
     handleLocationSelect
   } = useSearchLogic(allDropIns, allLocations, locationURLMap, locationAddressMap, locationCoordsMap);
 
-  // Handler for category filter from map popup
-  const handleCategoryFilter = (locationName: string, categoryId: string) => {
-    const newFilters = {
-      ...filters,
-      location: [locationName],
-      category: categoryId || '', // If empty string, clear category filter
-      subcategory: '', // Clear subcategory when selecting category
-      courseTitle: '', // Clear course title
-      age: '' // Clear age filter
-      // Preserve date and time filters
-    };
+  // Handle category filter from map popup
+  const handleCategoryFilter = (location: string, categoryId: string) => {
+    const newFilters = { ...filters };
+    
+    // Set the category filter
+    newFilters.category = categoryId || '';
+    newFilters.subcategory = ''; // Clear subcategory when category changes
+    
+    // Set the location filter to include this location
+    if (categoryId && !newFilters.location.includes(location)) {
+      newFilters.location = [location];
+    } else if (!categoryId) {
+      // If clearing category, keep the location filter as is
+      // (don't change location filter when deselecting category)
+    }
+    
     setFilters(newFilters);
     performSearch(newFilters);
   };
