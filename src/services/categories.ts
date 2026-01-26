@@ -119,7 +119,7 @@ export const categories: Category[] = [
   {
     id: 'games',
     name: 'Games & Recreation',
-    fallbackIcon: 'toys_and_games',
+    fallbackIcon: 'Ifl',
     subcategories: [
       { id: 'club', name: 'Clubs', keywords: ['club'] },
       { id: 'board-games', name: 'Board Games', keywords: ['board games', 'games: board', 'chess'] },

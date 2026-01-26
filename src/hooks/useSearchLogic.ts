@@ -172,6 +172,11 @@ export const useSearchLogic = (
         if (locationId) {
           const coords = locationCoordsMap.get(locationId);
           
+          if (!coords) {
+            // Debug: Log locations that exist in data but don't have coordinates
+            console.warn(`Location "${locationName}" (ID: ${locationId}) exists in data but has no coordinates in GeoJSON file`);
+          }
+          
           if (coords) {
             // Find the location data from allLocations for address formatting
             const locationData = allLocations.find(loc => loc["Location ID"].toString() === locationId);
