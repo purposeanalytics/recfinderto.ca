@@ -134,7 +134,7 @@ export const categories: Category[] = [
   {
     id: 'older-adult',
     name: 'Older Adult Programs',
-    fallbackIcon: 'group',    
+    fallbackIcon: 'directions_walk',    
     ageRequirement: { min: 60 },
     subcategories: [
       { id: 'older-adult-arts-crafts', name: 'Older Adult Arts & Crafts', keywords: ['painting', 'drawing', 'photography', 'visual art', 'design', 'colouring', 'craft', 'sewing', 'knitting', 'crochet', 'quilting', 'decoupage', 'paper tole', 'bunka', 'stained glass', 'carving', 'writing', 'music', 'band', 'choir', 'drumming', 'karaoke', 'drum', 'open mic', 'dance', 'tango', 'ballroom'], exclusions: ['dart'], ageRequirement: { min: 60 } },
