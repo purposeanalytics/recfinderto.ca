@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSearchForm } from '../hooks/useSearchForm';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useTimeOptions } from '../hooks/useTimeOptions';
@@ -59,6 +59,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
   const { timeOptions, dayOptions, formatTimeToAMPM } = useTimeOptions(filters, onFiltersChange);
 
   const { filteredCategories, filteredSubcategories } = useCategoryFilter(allDropIns, filters);
+
+  const locationInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
@@ -157,6 +159,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-base"> location_on </span>
             <input 
+              ref={locationInputRef}
               className="w-full rounded-lg bg-[#f6f7f8] dark:bg-slate-700 py-2.5 pl-10 pr-10 text-sm text-gray-900 dark:text-slate-200 placeholder-gray-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-[#13a4ec] focus:border-[#13a4ec] border-transparent" 
               placeholder="Search by location" 
               type="text"
@@ -176,26 +179,31 @@ const SearchForm: React.FC<SearchFormProps> = ({
               </button>
             )}
             
-            {/* Location Autocomplete Dropdown */}
-            {showLocationDropdown && (filteredLocationOptions.length > 0 || allFilteredLocations.length > 0) && (
+            {/* Location Autocomplete Dropdown - hide already selected locations */}
+            {showLocationDropdown && (() => {
+              const optionsToShow = filteredLocationOptions.filter(option => !selectedLocations.includes(option));
+              if (optionsToShow.length === 0) return null;
+              return (
               <div 
                 className="absolute z-20 w-full mt-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg shadow-lg max-h-60 overflow-auto"
                 onScroll={handleLocationDropdownScroll}
               >
-                {filteredLocationOptions.map((option, index) => (
+                {optionsToShow.map((option, index) => (
                   <div
                     key={index}
                     className="px-3 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700 text-sm text-gray-900 dark:text-slate-200"
                     onMouseDown={(e) => {
                       e.preventDefault() // Prevent input from losing focus
                       handleOptionSelect('location', option, setShowLocationDropdown, setShowProgramDropdown);
+                      locationInputRef.current?.blur();
                     }}
                   >
                     {option}
                   </div>
                 ))}
               </div>
-            )}
+              );
+            })()}
           </div>
           
           {/* Selected Locations */}
