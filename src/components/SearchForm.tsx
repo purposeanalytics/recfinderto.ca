@@ -51,7 +51,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
     filteredProgramOptions,
     filteredLocationOptions,
     allFilteredPrograms,
-    allFilteredLocations,
     handleProgramDropdownScroll,
     handleLocationDropdownScroll
   } = useAutocomplete(allDropIns, courseTitles, locations, allLocations, filters, searchInputs);
