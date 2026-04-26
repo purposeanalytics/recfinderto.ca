@@ -11,7 +11,7 @@ export const getCurrentDate = (): string => {
 export const getDefaultDate = (): string => {
   const now = new Date();
   const hour = now.getHours();
-  
+
   // If it's after 10 PM, default to tomorrow
   if (hour >= 22) {
     const tomorrow = new Date(now);
@@ -21,8 +21,46 @@ export const getDefaultDate = (): string => {
     const day = tomorrow.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  
+
   return getCurrentDate();
+};
+
+// Returns smart default date/time based on whether activities are still running today.
+// After last activity ends (before midnight): 'tomorrow' + 'Any time'.
+// After midnight (new day just started): today + 'Any time'.
+// Otherwise: today + next available time slot.
+export const getSmartDefaults = (
+  dropIns: Array<{ "Date Range": string; "End Hour": number; "End Min": number }>
+): { date: string; time: string } => {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const todayDate = getCurrentDate();
+
+  // After midnight (0 AM–5:59 AM): the new calendar day has just begun.
+  // Show Today + Any time so the user sees the full day's schedule ahead.
+  if (currentHour < 6) {
+    return { date: todayDate, time: 'Any time' };
+  }
+
+  // Find the latest end time among all activities scheduled for today.
+  const todayActivities = dropIns.filter(dropIn => {
+    const parts = (dropIn["Date Range"] || '').split(' to ');
+    if (parts.length !== 2) return false;
+    const [start, end] = parts;
+    return todayDate >= start && todayDate <= end;
+  });
+
+  if (todayActivities.length > 0) {
+    const lastEndMinutes = Math.max(
+      ...todayActivities.map(d => d["End Hour"] * 60 + d["End Min"])
+    );
+    if (currentHour * 60 + now.getMinutes() >= lastEndMinutes) {
+      // All activities are done for today — default to Tomorrow + Any time.
+      return { date: 'tomorrow', time: 'Any time' };
+    }
+  }
+
+  return { date: todayDate, time: getDefaultTime() };
 };
 
 // Helper function to get default time - return the next closest available time

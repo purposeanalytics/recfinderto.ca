@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getDayOfWeek, formatTimeForComparison, formatTimeStringForComparison, isDateInRange, normalizeDatePickerValue } from '../services/api';
 import { categorizeCourse, courseMatchesCategory, categories } from '../services/categories';
+import { getSmartDefaults } from '../utils/dateTimeUtils';
 
 interface SearchFilters {
   courseTitle: string;
@@ -514,7 +515,19 @@ export const useSearchLogic = (
       if (params.toString()) {
         return;
       }
-      performSearch();
+      // Compute smart defaults based on actual activity data before the first search
+      const smartDefaults = getSmartDefaults(allDropIns);
+      const defaultFilters: SearchFilters = {
+        courseTitle: '',
+        category: '',
+        subcategory: '',
+        date: smartDefaults.date,
+        time: smartDefaults.time,
+        location: [],
+        age: ''
+      };
+      setFilters(defaultFilters);
+      performSearch(defaultFilters);
     }
   }, [allDropIns.length, hasSearched]);
 

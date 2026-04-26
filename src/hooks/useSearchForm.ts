@@ -1,12 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { SearchFilters } from '../types';
-import { getCurrentDate, getDefaultDate, getDefaultTime } from '../utils/dateTimeUtils';
+import { getDefaultDate, getDefaultTime, getSmartDefaults } from '../utils/dateTimeUtils';
 import { courseMatchesCategory } from '../services/categories';
 
 export const useSearchForm = (
   filters: SearchFilters,
   onFiltersChange: (filters: SearchFilters) => void,
-  onSearch: (searchFilters?: SearchFilters) => void
+  onSearch: (searchFilters?: SearchFilters) => void,
+  allDropIns: Array<{ "Date Range": string; "End Hour": number; "End Min": number }> = []
 ) => {
   // State for search inputs
   const [searchInputs, setSearchInputs] = useState({
@@ -260,33 +261,23 @@ export const useSearchForm = (
   }, [onSearch, filters, searchInputs]);
 
   const handleClearAll = useCallback(() => {
-    // Reset all filters to default values - use today's date, not tomorrow
+    const smartDefaults = getSmartDefaults(allDropIns);
     const defaultFilters: SearchFilters = {
       courseTitle: '',
       category: '',
       subcategory: '',
-      date: getCurrentDate(), // Always use today, not getDefaultDate() which can be tomorrow
-      time: getDefaultTime(),
+      date: smartDefaults.date,
+      time: smartDefaults.time,
       location: [],
       age: ''
     };
-    
-    // Reset all search inputs
-    setSearchInputs({
-      location: '',
-      program: ''
-    });
-    
-    // Reset selected locations
+
+    setSearchInputs({ location: '', program: '' });
     setSelectedLocations([]);
-    
-    // Clear committed course title
     setCommittedCourseTitle('');
-    
-    // Update the filters and trigger search
     onFiltersChange(defaultFilters);
     onSearch(defaultFilters);
-  }, [onFiltersChange, onSearch]);
+  }, [onFiltersChange, onSearch, allDropIns]);
 
   return {
     searchInputs,

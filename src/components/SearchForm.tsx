@@ -41,7 +41,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
     generateShareUrl,
     handleKeyPress,
     handleClearAll
-  } = useSearchForm(filters, onFiltersChange, onSearch);
+  } = useSearchForm(filters, onFiltersChange, onSearch, allDropIns);
 
   const {
     showProgramDropdown,
@@ -55,7 +55,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
     handleLocationDropdownScroll
   } = useAutocomplete(allDropIns, courseTitles, locations, allLocations, filters, searchInputs);
 
-  const { timeOptions, dayOptions, formatTimeToAMPM } = useTimeOptions(filters, onFiltersChange);
+  const { timeOptions, dayOptions, formatTimeToAMPM } = useTimeOptions(filters, onFiltersChange, allDropIns);
 
   const { filteredCategories, filteredSubcategories } = useCategoryFilter(allDropIns, filters);
 
@@ -118,7 +118,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             type="text"
             value={searchInputs.program}
             onChange={(e) => handleSearchInputChange('program', e.target.value)}
-            onKeyPress={(e) => handleKeyPress(e, 'program')}
+            onKeyDown={(e) => handleKeyPress(e, 'program')}
             onFocus={() => setShowProgramDropdown(true)}
             onBlur={() => setTimeout(() => setShowProgramDropdown(false), 150)}
           />
@@ -164,7 +164,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               type="text"
               value={searchInputs.location}
               onChange={(e) => handleSearchInputChange('location', e.target.value)}
-              onKeyPress={(e) => handleKeyPress(e, 'location')}
+              onKeyDown={(e) => handleKeyPress(e, 'location')}
               onFocus={() => setShowLocationDropdown(true)}
               onClick={() => setShowLocationDropdown(true)}
               onBlur={() => setTimeout(() => setShowLocationDropdown(false), 200)}
